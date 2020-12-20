@@ -125,7 +125,8 @@ class WebView {
     activate(context, name, cmdName, htmlPath = undefined) {
         // activate WebviewApi
         WebviewApi.activate(context, name, this.bridgeData);
-        htmlPath || (htmlPath = path.join(context.extensionPath, 'web', 'dist', 'index.html'));
+        // htmlPath || (htmlPath = path.join(context.extensionPath, 'web', 'dist', 'index.html'));
+        htmlPath || (htmlPath = path.join(context.extensionPath, 'app', 'build', 'index.html'));
         context.subscriptions.push(
             vscode.commands.registerCommand(cmdName, (uri) => {
                 this._uri = uri;
