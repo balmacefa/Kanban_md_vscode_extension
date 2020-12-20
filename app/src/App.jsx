@@ -5,8 +5,7 @@ import Bookshelf from "./components/board/Bookshelf";
 // import "@atlaskit/css-reset";
 import styled from "styled-components";
 import parseMD from 'parse-md'
-
-import template from "./components/board/md_parser/Templates/01_template.md"
+import { window } from "vscode";
 
 const Container = styled.div`
   padding: 1rem;
@@ -183,6 +182,27 @@ class App extends React.Component {
     this.setState(newState);
     return;
   };
+  
+  
+    getRootPath = e => {
+        // @ts-ignore
+        this.msg = window.webviewData.rootPath;
+    }
+    
+    selectFile() {
+        window.vscode.showOpenDialog({canSelectFiles: true}).then(msg => {
+            if (msg && msg.data) {
+                this.msg = msg.data[0];
+            }
+        });
+    },
+    alert() {
+        window.vscode.showMessage({ txt: `this is a alert.` });
+    },
+    output() {
+        window.vscode.showTxt2Output({txt: `this is output dialog.`});
+    }
+
 
   render() {
     return (
