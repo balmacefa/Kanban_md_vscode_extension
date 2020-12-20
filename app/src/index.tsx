@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import vsCodeConnector from './vs_code_utils/connector/e.g.index';
+
+vsCodeConnector.activate();
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
