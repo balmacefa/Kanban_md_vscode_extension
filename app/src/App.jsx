@@ -4,6 +4,9 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Bookshelf from "./components/board/Bookshelf";
 // import "@atlaskit/css-reset";
 import styled from "styled-components";
+import parseMD from 'parse-md'
+
+import template from "./components/board/md_parser/Templates/01_template.md"
 
 const Container = styled.div`
   padding: 1rem;
@@ -84,20 +87,11 @@ const initData = {
 class App extends React.Component {
   state = initData;
 
-  // async componentDidMount() {
-  //   try {
-  //     const response = await fetch(
-  //       `https://andric-kanbanbookshelf.builtwithdark.com/bookshelves`
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     const json = await response.json();
-  //     this.setState(json);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async componentDidMount() {
+    const { metadata, content } = parseMD(template)
+    console.log(metadata)
+    console.log(content)
+  }
 
   onDragEnd = result => {
     const { destination, source, draggableId, type } = result;
