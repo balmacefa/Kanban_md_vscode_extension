@@ -2,6 +2,8 @@ const fs = require('fs');
 const os = require('os');
 const vscode = require('vscode');
 
+const parseMD = require('parse-md').default;
+
 const ApiPromise = (callBack) => {
     return new Promise((resolve, reject) => {
         callBack(resolve, reject);
@@ -337,6 +339,31 @@ class _WebviewApi {
                 });
             });
         };
+        
+        this.log = (msg) => {
+            console.log(msg);
+        };
+
+        this.parseMD = (path) => {
+            return ApiPromise((resolve) => {
+                fs.readFile(path, 'utf8', function (err, data) {
+                    let oerr = undefined;
+                    let odata = undefined;
+                    console.log("PARSE 02");
+                    if (!err) {
+
+                        console.log("PARSE 03");
+                        const result = parseMD(data);
+                        resolve(result);
+
+                    } else {
+                        oerr = err.message || `Failed to read file: ${path}`;
+                    }
+                    resolve({ error: oerr, data: odata || data });
+                });
+            });
+
+        };
         /**
          * Write file
          * @type {({path, data, options}: {path: string, data: string|[]|{}, options?: {encoding?: string|undefined, mode?: number|string, flag?: string}|string|undefined}) => Thenable<{error?: string|undefined}>}
@@ -354,7 +381,7 @@ class _WebviewApi {
          */
         this.request = ({ url, method = 'POST', data = undefined, headers = { "content-type": "application/json" } }) => {
             return ApiPromise((resolve) => {
-        		const request = require('request');
+                const request = require('request');
                 request({ url, method, headers, body: data }, (error, response, body) => {
                     error && typeof error !== 'string' && (error = error.message || error.toString());
                     resolve({ error, body, statusCode: response.statusCode, statusMessage: response.statusMessage });
@@ -391,7 +418,7 @@ class _WebviewApi {
         this._bridgeData = bridgeData;
         return this;
     }
-    deactivate() {}
+    deactivate() { }
 }
 const WebviewApi = new _WebviewApi();
 module.exports = WebviewApi;

@@ -3,6 +3,7 @@ import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Bookshelf from "./components/board/Bookshelf";
 // import "@atlaskit/css-reset";
+import './style/vscode/vscode.css';
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -78,7 +79,8 @@ const initData = {
     "bookshelf-4",
     "bookshelf-5",
     "bookshelf-6"
-  ]
+  ],
+  md: 'hola'
 };
 
 class App extends React.Component {
@@ -181,63 +183,76 @@ class App extends React.Component {
     return;
   };
   
-    selectFile =()=> {
-        // @ts-ignore
-        window.vscode.showOpenDialog({canSelectFiles: true}).then(msg => {
-            // if (msg && msg.data) {
-            //     msg.data[0];
-            // }
-            console.log(msg);
+  setMD = (md) => {
+    const newState = {
+      ...this.state,
+      md: md
+    };
+    this.setState(newState);
+  }
+
+  selectFile = () => {
+    // @ts-ignore
+    window.vscode.showOpenDialog({ canSelectFiles: true }).then(md => {
+      if (md && md.data) {
+        this.setMD(JSON.stringify(md));
+        window.vscode.post({ cmd:'parseMD', args: md.data[0] }).then(mdParse => {
+          // window.vscode.post({ cmd:'log', args: mdParse })
+          this.setMD(JSON.stringify(mdParse));
         });
-    }
+      }
+    });
+  }
 
 
   render() {
     return (
       <div>
         <div>
+          {this.state.md}
+        </div>
+        <div>
           <button onClick={this.selectFile}>
             Open md
           </button>
         </div>
         <div>
-        <DragDropContext
-        onDragStart={this.onDragStart}
-        onDragUpdate={this.onDragUpdate}
-        onDragEnd={this.onDragEnd}
-        >
-        <Droppable
-        droppableId="all-bookshelves"
-        direction="horizontal"
-        type="bookshelf"
-        >
-        {provided => (
-          <Container {...provided.droppableProps} ref={provided.innerRef}>
-          {this.state.bookshelfOrder.map((bookshelfId, index) => {
-            const bookshelf = this.state.bookshelves[bookshelfId];
-            const books = bookshelf.bookIds.map(
-              bookId => this.state.books[bookId]
-              );
-              return (
-                <Bookshelf
-                key={bookshelf.id}
-                bookshelf={bookshelf}
-                books={books}
-                index={index}
-                />
-                );
-              })}
-              {provided.placeholder}
-              </Container>
+          <DragDropContext
+            onDragStart={this.onDragStart}
+            onDragUpdate={this.onDragUpdate}
+            onDragEnd={this.onDragEnd}
+          >
+            <Droppable
+              droppableId="all-bookshelves"
+              direction="horizontal"
+              type="bookshelf"
+            >
+              {provided => (
+                <Container {...provided.droppableProps} ref={provided.innerRef}>
+                  {this.state.bookshelfOrder.map((bookshelfId, index) => {
+                    const bookshelf = this.state.bookshelves[bookshelfId];
+                    const books = bookshelf.bookIds.map(
+                      bookId => this.state.books[bookId]
+                    );
+                    return (
+                      <Bookshelf
+                        key={bookshelf.id}
+                        bookshelf={bookshelf}
+                        books={books}
+                        index={index}
+                      />
+                    );
+                  })}
+                  {provided.placeholder}
+                </Container>
               )}
-              </Droppable>
-              </DragDropContext>
-            </div>
-          </div>
-          );
-        }
-      }
-      
-      export default App;
-      
-      
+            </Droppable>
+          </DragDropContext>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
+

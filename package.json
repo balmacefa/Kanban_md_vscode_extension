@@ -49,6 +49,7 @@
     },
     "dependencies": {
         "@atlaskit/theme": "^11.0.2",
-        "@emotion/styled": "^11.0.0"
+        "@emotion/styled": "^11.0.0",
+        "parse-md": "^2.0.4"
     }
 }
