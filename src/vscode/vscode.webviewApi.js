@@ -2,7 +2,7 @@ const fs = require('fs');
 const os = require('os');
 const vscode = require('vscode');
 
-const parseMD = require('parse-md').default;
+const mdMetadataParser = require('md_metadata_parser');
 
 const ApiPromise = (callBack) => {
     return new Promise((resolve, reject) => {
@@ -339,28 +339,38 @@ class _WebviewApi {
                 });
             });
         };
-        
+
         this.log = (msg) => {
             console.log(msg);
         };
 
-        this.parseMD = (path) => {
+        this.parseMd2Json = (path) => {
             return ApiPromise((resolve) => {
-                fs.readFile(path, 'utf8', function (err, data) {
-                    let oerr = undefined;
-                    let odata = undefined;
-                    console.log("PARSE 02");
-                    if (!err) {
+                try {
+                    var mdData = fs.readFileSync(path, "utf8");
+                    var data = mdMetadataParser.parseMd2Json({ mdData });
+                    resolve({ status: 'successful', data });
 
-                        console.log("PARSE 03");
-                        const result = parseMD(data);
-                        resolve(result);
+                } catch (error) {
+                    resolve({ status: 'error', error });
+                }
 
-                    } else {
-                        oerr = err.message || `Failed to read file: ${path}`;
-                    }
-                    resolve({ error: oerr, data: odata || data });
-                });
+            });
+
+        };
+
+        this.parseJson2Md = ({ json, outputPath }) => {
+            return ApiPromise((resolve) => {
+                try {
+
+                    var outputMD = mdMetadataParser.parseJson2Md({ json });
+
+                    var path = fs.writeFileSync(outputPath, outputMD);
+                    resolve({ status: 'successful', path });
+                } catch (error) {
+                    resolve({ status: 'error', error });
+                }
+
             });
 
         };

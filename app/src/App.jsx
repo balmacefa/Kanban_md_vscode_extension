@@ -86,12 +86,6 @@ const initData = {
 class App extends React.Component {
   state = initData;
 
-  // async componentDidMount() {
-  //   const { metadata, content } = parseMD(template)
-  //   console.log(metadata)
-  //   console.log(content)
-  // }
-
   onDragEnd = result => {
     const { destination, source, draggableId, type } = result;
 
@@ -182,7 +176,7 @@ class App extends React.Component {
     this.setState(newState);
     return;
   };
-  
+
   setMD = (md) => {
     const newState = {
       ...this.state,
@@ -196,12 +190,24 @@ class App extends React.Component {
     window.vscode.showOpenDialog({ canSelectFiles: true }).then(md => {
       if (md && md.data) {
         this.setMD(JSON.stringify(md));
-        window.vscode.post({ cmd:'parseMD', args: md.data[0] }).then(mdParse => {
+        window.vscode.post({ cmd: 'parseMd2Json', args: md.data[0] }).then(mdParse => {
           // window.vscode.post({ cmd:'log', args: mdParse })
           this.setMD(JSON.stringify(mdParse));
         });
       }
     });
+  }
+
+  saveFile = () => {
+    var json = {};
+    var outputPath = '';
+    window.vscode.post({ cmd: 'parseMd2Json', args: { json, outputPath } }).then(({ error, path, status }) => {
+
+      if (error) {
+      }
+
+    });
+    // @ts-ignore
   }
 
 

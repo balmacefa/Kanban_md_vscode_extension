@@ -36,6 +36,7 @@
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "node ./node_modules/vscode/bin/test",
         "build": "npm run buildweb && vsce package",
+        "buildvs": "vsce package",
         "buildext": "vsce package",
         "buildweb": "cd ./app && yarn build && cd ..",
         "start": "cd ./app && yarn start && cd .."
@@ -50,6 +51,6 @@
     "dependencies": {
         "@atlaskit/theme": "^11.0.2",
         "@emotion/styled": "^11.0.0",
-        "parse-md": "^2.0.4"
+        "md_metadata_parser": "^1.0.0"
     }
 }
