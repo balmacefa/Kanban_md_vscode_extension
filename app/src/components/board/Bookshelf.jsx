@@ -3,8 +3,11 @@ import styled from "styled-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Book from "./Book";
 
+import { Typography } from 'antd';
+
 const Container = styled.div`
   margin: 8px;
+  padding: 4px;
   min-width: 220px;
   border: 1px solid lightgray;
   border-radius: 2px;
@@ -18,12 +21,7 @@ const Container = styled.div`
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 `;
-const Title = styled.h1`
-  padding: 16px 16px;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-`;
+
 const BookList = styled.div`
   transition: background-color 130ms ease-out;
   padding: 8px;
@@ -32,10 +30,25 @@ const BookList = styled.div`
   min-height: 100px;
 `;
 const BookshelfCount = styled.span`
-  color: gray;
-  font-size: 0.7rem;
-  padding-left: 4px;
+  z-index: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  color: #fff;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  white-space: nowrap;
+  text-align: center;
+  background: #23d5b4;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 0 0 1px #fff;
+  box-shadow: 0 0 0 1px #fff;
+  margin-left: 8px
 `;
+
+const { Title } = Typography;
+
 
 export default class Bookshelf extends React.Component {
   render() {
@@ -45,7 +58,7 @@ export default class Bookshelf extends React.Component {
       <Draggable draggableId={id} index={index}>
         {provided => (
           <Container {...provided.draggableProps} ref={provided.innerRef}>
-            <Title {...provided.dragHandleProps}>
+            <Title level={3} {...provided.dragHandleProps}>
               {title} <BookshelfCount>{books.length}</BookshelfCount>
             </Title>
             <Droppable droppableId={id} type="book">

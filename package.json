@@ -49,8 +49,8 @@
         "vscode": "^1.1.28"
     },
     "dependencies": {
-        "@atlaskit/theme": "^11.0.2",
         "@emotion/styled": "^11.0.0",
+        "antd": "^4.10.0",
         "md_metadata_parser": "^1.0.0"
     }
 }
